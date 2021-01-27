@@ -147,8 +147,8 @@ export class PopupProvider {
   public ionicConfirm(
     title: string,
     message: string,
-    okText?: string,
-    cancelText?: string
+    okText: string = "cancel",
+    cancelText: string = "confirm"
   ): Promise<any> {
     return new Promise((resolve, reject) => {
       this.alertPopup = null;
@@ -159,7 +159,7 @@ export class PopupProvider {
         backdropDismiss: false,
         buttons: [
           {
-            text: cancelText ? cancelText : this.translate.instant('cancel'),
+            text: this.translate.instant(cancelText),
             handler: () => {
               console.log('ionicConfirm Disagree clicked');
               this.alertPopup = null;
@@ -167,7 +167,7 @@ export class PopupProvider {
             }
           },
           {
-            text: okText ? okText : this.translate.instant('confirm'),
+            text: this.translate.instant(okText),
             handler: () => {
               console.log('Agree clicked');
               this.alertPopup = null;

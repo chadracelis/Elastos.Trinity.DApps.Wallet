@@ -15,6 +15,8 @@ export const fr = {
     "amount": "Montant",
     "cancel": "Annuler",
     "confirm": "Confirmer",
+    "ok": "Ok",
+    "exit": "Exit",
     "error": "Erreur",
     'click-to-load-more': "Toucher pour voir davantage",
     'transaction-fail': 'Erreur de transaction',
@@ -143,6 +145,7 @@ export const fr = {
     "balance-remaining": "Solde restant",
     "insufficient-balance": "Solde insuffisant",
     "transfer-all": "Tous",
+    "max": "MAX",
 
     /********************
     * Coin Receive Page *
@@ -331,7 +334,8 @@ export const fr = {
     /***********************
     * No Wallet *
     ************************/
-    "intent-no-wallet": "Vous n'avez pas de portefeuille, voulez-vous le créer maintenant?",
+    "intent-no-wallet-title": "No Wallet",
+    "intent-no-wallet-msg": "Vous n'avez pas de portefeuille, voulez-vous le créer maintenant?",
 
     /********************************************** Create Wallet Screens ***********************************************/
 

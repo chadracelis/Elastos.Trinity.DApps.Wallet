@@ -280,7 +280,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
      */
     async createSendTransaction() {
         let toAmount: number;
-        if (!this.sendAllBalance && ((this.chainId === StandardCoinName.ELA) || (this.chainId === StandardCoinName.IDChain))) {
+        if (this.chainId === StandardCoinName.ELA || this.chainId === StandardCoinName.IDChain) {
             toAmount = this.accMul(this.amount, Config.SELA);
         } else {
             toAmount = this.amount;
@@ -393,19 +393,29 @@ export class CoinTransferPage implements OnInit, OnDestroy {
         }
     }
 
+    supportsMaxTransfer() {
+        if(this.chainId === StandardCoinName.ELA || this.chainId === StandardCoinName.IDChain) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    setMaxTransfer() {
+        this.amount = this.masterWallet.subWallets[this.chainId].getDisplayBalance().toNumber() - 0.001;
+    }
+
     async goTransaction() {
         // this.showConfirm();
         // this.showSuccess();
 
-        if (this.sendAllBalance || this.valuesReady()) {
+        if (this.valuesReady()) {
             await this.startTransaction();
         }
     }
 
     // For revealing button
     valuesValid(): boolean {
-        if (this.sendAllBalance) return true;
-
         if (Util.isNull(this.amount)) {
             return false;
         } else if (!Util.number(this.amount)) {

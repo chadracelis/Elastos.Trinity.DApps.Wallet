@@ -51,13 +51,15 @@
             </ion-col>
         </ion-row>
         <ion-row class="input-row">
-            <h4 *ngIf="sendAllBalance">{{ 'transfer-all' | translate }}</h4>
-            <ion-input *ngIf="!sendAllBalance"
-                type="number"
-                placeholder="{{ 'amount' | translate }}"
-                [(ngModel)]="amount"
-            >
-            </ion-input>
+            <ion-col size="12">
+                <ion-input
+                    type="number"
+                    placeholder="{{ 'amount' | translate }}"
+                    [(ngModel)]="amount"
+                >
+                </ion-input>
+                <p *ngIf="supportsMaxTransfer()" (click)="setMaxTransfer()">{{ 'max' | translate }}</p>
+            </ion-col>
         </ion-row>
     </ion-grid>
 </ion-content>
@@ -74,30 +76,24 @@
                 <p *ngIf="isStandardSubwallet(fromSubWallet)">{{ currencyService.selectedCurrency.symbol }}</p>
             </ion-col>
             <ion-col size="6" class="right-col">
-                <h4 *ngIf="sendAllBalance">{{ 'transfer-all' | translate }}</h4>
-                <ion-input *ngIf="!sendAllBalance"
+                <ion-input
                     class="amount-input"
                     type="number"
                     placeholder="0"
                     [(ngModel)]="amount"
                 >
                 </ion-input>
-                <p *ngIf="amount && !sendAllBalance">
+                <p *ngIf="amount">
                     {{ fromSubWallet.getAmountInExternalCurrency(convertAmountToBigNumber(amount)) }}
                 </p>
             </ion-col>
         </ion-row>
 
-        <p>{{ 'balance' | translate }}:  <strong>{{ masterWallet.subWallets[chainId].getDisplayBalance() }}</strong></p>
+        <ion-row class="balance-row">
+            <p *ngIf="supportsMaxTransfer()" id="max-btn" (click)="setMaxTransfer()">{{ 'max' | translate }}</p>
+            <p [class.align-right]="!supportsMaxTransfer()">{{ 'balance' | translate }}:  <strong>{{ masterWallet.subWallets[chainId].getDisplayBalance() }}</strong></p>
+        </ion-row>
 
-     <!--    <p *ngIf='isPositiveResidual(masterWallet.subWallets[chainId].getDisplayBalance())'>
-            {{ 'balance-remaining' | translate }}:
-            {{ getResidual(masterWallet.subWallets[chainId].getDisplayBalance()) }}
-        </p>
-        <p *ngIf='!isPositiveResidual(masterWallet.subWallets[chainId].getDisplayBalance())' class="warning-text">
-            {{ 'insufficient-balance' | translate }}
-        </p>
- -->
         <h1>{{ 'send-to' | translate }}</h1>
         <ion-row class="item-row">
             <ion-col size="12">
@@ -114,8 +110,11 @@
                 </div>
             </ion-col>
         </ion-row>
-        <p [class.invisible]="!addressName">{{ addressName }}</p>
 
+        <ion-row class="contact-row" [class.invisible]="!addressName">
+            <p>{{ addressName }}</p>
+        </ion-row>
+       
         <ion-row *ngIf="suggestedAddresses.length > 0" class="cryptoname-row">
             <ion-col size="12" *ngFor="let suggestedAddress of suggestedAddresses" (click)="selectSuggestedAddress(suggestedAddress)">
                 <span>{{ suggestedAddress.getDisplayName() }}</span>
@@ -143,26 +142,20 @@
 
 <!------------------ RECHARGE AND SEND FOOTER ------------------>
 <ion-footer
-    *ngIf="!native.popup && transferType !== 3 && waitingForSyncCompletion"
+    *ngIf="!native.popup && transferType !== 3"
     class="footer" [class.dark-footer]="theme.darkMode"
 >
-    <ion-row class="btn-container">
+    <ion-row *ngIf="!waitingForSyncCompletion" class="btn-container">
+        <ion-button color="primary" [disabled]="!valuesValid()" (click)="goTransaction()">
+            <ion-label>{{ getButtonLabel() | translate }}</ion-label>
+        </ion-button>
+    </ion-row>
+    <ion-row *ngIf="waitingForSyncCompletion" class="syncing-container">
         <ion-card-title>{{ 'waitforsync-loading' | translate }}</ion-card-title>
         <ion-card-subtitle>
             {{ 'waitforsync-intro' | translate }}
         </ion-card-subtitle>
-        <span class="syncing">&#8226; {{ 'sync-progress' | translate: { progress: fromSubWallet.progress } }}</span>
-    </ion-row>
-</ion-footer>
-
-<ion-footer
-    *ngIf="!native.popup && transferType !== 3 && !waitingForSyncCompletion"
-    class="footer" [class.dark-footer]="theme.darkMode"
->
-    <ion-row class="btn-container">
-        <ion-button color="primary" [disabled]="!valuesValid()" (click)="goTransaction()">
-            <ion-label>{{ getButtonLabel() | translate }}</ion-label>
-        </ion-button>
+        <span>&#8226; {{ 'sync-progress' | translate: { progress: fromSubWallet.progress } }}</span>
     </ion-row>
 </ion-footer>
 
@@ -212,7 +205,7 @@
 
 <!------------------ PAY INTENT FOOTER ------------------>
 <ion-footer
-    *ngIf="transferType === 3"
+     *ngIf="transferType === 3"
     class="pay-footer" [class.dark-pay-footer]="theme.darkMode"
 >
     <ion-row class="btn-row">

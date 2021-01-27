@@ -4,7 +4,7 @@ import { Native } from 'src/app/services/native.service';
 import { TranslateService } from '@ngx-translate/core';
 import { Util } from 'src/app/model/Util';
 import { Router } from '@angular/router';
-import { ERC20Coin } from 'src/app/model/Coin';
+import { ERC20Coin, Coin } from 'src/app/model/Coin';
 import { AppService } from 'src/app/services/app.service';
 import { CoinService } from 'src/app/services/coin.service';
 import { PopupProvider } from 'src/app/services/popup.service';
@@ -53,7 +53,11 @@ export class CoinErc20DetailsPage implements OnInit {
         console.log('ERC20 Subwallet', this.subWallet);
         console.log('ERC20 Details', this.coin);
 
-        if (this.coin.coinIsCustom() || this.subWallet && !this.subWallet.getDisplayBalance().isZero()) {
+        /* if (this.coin.coinIsCustom() || this.subWallet && !this.subWallet.getDisplayBalance().isZero()) {
+          this.canDelete = true;
+        } */
+
+        if (this.coin.coinIsCustom()) {
           this.canDelete = true;
         }
 
