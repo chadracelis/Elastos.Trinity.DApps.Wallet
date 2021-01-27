@@ -15,6 +15,8 @@ export const zh = {
     "amount": "金额",
     "cancel": "取消",
     "confirm": "确定",
+    "ok": "Okay",
+    "exit": "Exit",
     "error": "错误",
     'click-to-load-more': "点击加载更多",
     'transaction-fail': '交易失败',
@@ -143,6 +145,7 @@ export const zh = {
     "balance-remaining": "余额 ",
     "insufficient-balance": "余额不足",
     "transfer-all": "全部",
+    "max": "MAX",
 
     /********************
     * Coin Receive Page *
@@ -331,7 +334,8 @@ export const zh = {
     /***********************
     * No Wallet *
     ************************/
-    "intent-no-wallet": "您还没有钱包，现在要创建吗？",
+    "intent-no-wallet-title": "No Wallet",
+    "intent-no-wallet-msg": "您还没有钱包，现在要创建吗？",
 
     /********************************************** Create Wallet Screens ***********************************************/
 

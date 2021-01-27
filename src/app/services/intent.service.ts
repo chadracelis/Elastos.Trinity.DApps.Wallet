@@ -55,7 +55,7 @@ export class IntentService {
 
         this.walletList = this.walletManager.getWalletsList();
         if (this.walletList.length === 0) {
-            const confirmToDelete = await this.popupProvider.ionicConfirm('confirmTitle', 'intent-no-wallet');
+            const confirmToDelete = await this.popupProvider.ionicConfirm('intent-no-wallet-title', 'intent-no-wallet-msg', 'ok', 'exit');
             if (confirmToDelete) {
                 this.native.setRootRouter('launcher');
                 // Should call sendIntentResponse?
