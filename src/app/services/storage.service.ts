@@ -26,7 +26,7 @@ export class LocalStorage {
         });
     }
 
-    public set(key: string, value: any): Promise<any> {
+    public set(key: string, value: any): Promise<void> {
         return new Promise((resolve) => {
             appManager.setSetting(key, value, () => {
                 resolve();

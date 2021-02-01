@@ -34,6 +34,7 @@ import { Events } from './events.service';
 })
 export class CoinService {
     private availableCoins: Coin[] = null;
+    private deletedERC20Coins: ERC20Coin[] = null;
     private activeNetwork: NetworkType;
 
     constructor(private storage: LocalStorage, private events: Events, private prefs: PrefsService) {
@@ -41,6 +42,7 @@ export class CoinService {
 
     public async init() {
         this.availableCoins = [];
+        this.deletedERC20Coins = [];
 
         this.activeNetwork = await this.prefs.getActiveNetworkType();
 
@@ -65,7 +67,10 @@ export class CoinService {
 
         await this.addCustomERC20CoinsToAvailableCoins();
 
+        await this.initDeletedCustomERC20Coins();
+
         console.log("Available coins:", this.availableCoins);
+        console.log("Deleted coins:", this.deletedERC20Coins);
     }
 
     public getAvailableCoins(): Coin[] {
@@ -94,28 +99,38 @@ export class CoinService {
         });
     }
 
+    public isCoinDeleted(address: string) {
+        for (let coin of this.deletedERC20Coins) {
+            if (coin.getContractAddress() === address) return true;
+        }
+        return false;
+    }
+
     /**
      * Adds a custom ERC20 coin to the list of available coins.
      * If activateInWallet is passed, the coin is automatically added to that wallet.
      */
-    public async addCustomERC20Coin(coin: ERC20Coin, activateInWallet?: MasterWallet) {
-        console.log("Add coin to custom ERC20 coins list", coin);
+    public async addCustomERC20Coin(erc20Coin: ERC20Coin, activateInWallet?: MasterWallet) {
+        console.log("Add coin to custom ERC20 coins list", erc20Coin);
 
         const existingCoins = await this.getCustomERC20Coins();
-        existingCoins.push(coin);
+        existingCoins.push(erc20Coin);
 
         // Add to the available coins list
-        this.availableCoins.push(coin);
+        this.availableCoins.push(erc20Coin);
 
         // Save to permanent storage
         await this.storage.set("custom-erc20-coins", existingCoins);
 
+        this.deletedERC20Coins = this.deletedERC20Coins.filter((coin) => coin.getContractAddress() !== coin.getContractAddress());
+        await this.storage.set("custom-erc20-coins-deleted", this.deletedERC20Coins);
+
         // If needed, activate this new coin in the given wallet
         if (activateInWallet) {
-            await activateInWallet.createSubWallet(coin);
+            await activateInWallet.createSubWallet(erc20Coin);
         }
 
-        this.events.publish("custom-coin-added", coin.getID());
+        this.events.publish("custom-coin-added", erc20Coin.getID());
     }
 
     public async deleteERC20Coin(erc20Coin: ERC20Coin) {
@@ -124,6 +139,10 @@ export class CoinService {
         allCustomERC20Coins = allCustomERC20Coins.filter((coin) => coin.getContractAddress() !== erc20Coin.getContractAddress());
         await this.storage.set("custom-erc20-coins", allCustomERC20Coins);
         console.log('availableCoins after deleting', this.availableCoins);
+
+        this.deletedERC20Coins.push(erc20Coin);
+        await this.storage.set("custom-erc20-coins-deleted", this.deletedERC20Coins);
+
         this.events.publish("custom-coin-deleted");
     }
 
@@ -139,6 +158,17 @@ export class CoinService {
         }
 
         return customCoins;
+    }
+
+    private async initDeletedCustomERC20Coins(): Promise<ERC20Coin[]> {
+        const rawCoinList = await this.storage.get("custom-erc20-coins-deleted");
+        if (!rawCoinList) {
+            return [];
+        }
+
+        for (let rawCoin of rawCoinList) {
+            this.deletedERC20Coins.push(ERC20Coin.fromJson(rawCoin));
+        }
     }
 
     /**
