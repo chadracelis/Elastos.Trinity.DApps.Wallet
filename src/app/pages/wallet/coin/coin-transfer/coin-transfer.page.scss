@@ -234,7 +234,7 @@
                 font-weight: 600;
                 letter-spacing: 0.95px;
             }
-    
+
             p {
                 margin: 0;
                 padding-top: 4px;
@@ -272,7 +272,7 @@
             .amount-input {
                 --padding-end: 0;
                 --padding-top: 0;
-               --padding-bottom: 4px;
+                --padding-bottom: 4px;
                 font-weight: 700;
             }
 
@@ -448,7 +448,7 @@
         justify-content: space-between;
         align-items: center;
 
-        h2, .amount-input {
+        h2, h5, .amount-input {
             width: 100%;
             margin: 0;
             font-size: 19px;
@@ -489,7 +489,7 @@
             align-items: flex-end;
             overflow: hidden;
 
-            .amount-input, p {
+            .amount-input, p, h5 {
                 text-align: right;
             }
 
