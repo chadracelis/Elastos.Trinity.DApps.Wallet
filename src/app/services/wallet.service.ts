@@ -163,6 +163,10 @@ export class WalletManager {
                 // If the sync service does not start, then get balance by rpc.
                 this.getAllMasterWalletBalanceByRPC();
             });
+
+            // Let the runtime know we are ready so it can start the next service.
+            if (appManager.notifyServiceReady)
+                appManager.notifyServiceReady();
         } else {
             // Start the sync service if we are in a background service
             await this.syncService.init(this);

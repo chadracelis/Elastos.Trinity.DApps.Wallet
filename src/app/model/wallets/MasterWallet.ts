@@ -199,13 +199,13 @@ export class MasterWallet {
         const erc20TokenList = await (this.subWallets[StandardCoinName.ETHSC] as ETHChainSubWallet).getERC20TokenList();
         erc20TokenList.forEach( async (token: WalletPlugin.ERC20TokenInfo) => {
             if (token.symbol && token.name) {
-                if (!this.subWallets[token.symbol]) {
+                if (!this.subWallets[token.symbol] && !this.coinService.isCoinDeleted(token.contractAddress)) {
                     try {
                         const erc20Coin = this.coinService.getERC20CoinByContracAddress(token.contractAddress);
                         if (erc20Coin) {
                             await this.createSubWallet(erc20Coin);
                         } else {
-                            const newCoin = new ERC20Coin(token.symbol, token.symbol, token.name, token.contractAddress, activeNetwork, false);
+                            const newCoin = new ERC20Coin(token.symbol, token.symbol, token.name, token.contractAddress, activeNetwork, true);
                             await this.coinService.addCustomERC20Coin(newCoin, this);
                         }
                     } catch (e) {

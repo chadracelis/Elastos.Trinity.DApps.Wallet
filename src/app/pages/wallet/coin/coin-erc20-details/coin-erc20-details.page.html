@@ -7,7 +7,7 @@
           </div>
       </div>
       <div class="coinTitle">{{ coin.getDescription() }}</div>
-      <div class="qrcode-container">
+      <div *ngIf="contractAddress" class="qrcode-container">
           <qrcode [qrdata]="contractAddress" [size]="150"></qrcode>
       </div>
       <h1>{{ 'coin-erc20-details-address' | translate }}</h1>

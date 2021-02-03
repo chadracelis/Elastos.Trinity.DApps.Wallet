@@ -1,7 +1,7 @@
 <ion-content>
     <ion-grid class="container" [class.dark-container]="theme.darkMode">
         <img [src]="!theme.darkMode ? 'assets/coins/ela-black.svg' : 'assets/coins/ela-white.svg'"/>
-        <div class="qrcode-container">
+        <div *ngIf="qrcode" class="qrcode-container">
             <qrcode [qrdata]="qrcode" [size]="150"></qrcode>
         </div>
         <h1>{{ 'coin-receive-ela-address' | translate: { coinName: chainId } }}</h1>

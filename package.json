@@ -21,7 +21,7 @@
     "@angular/platform-browser-dynamic": "11.0.5",
     "@angular/router": "11.0.5",
     "@elastosfoundation/trinity-dapp-sdk": "^1.0.22",
-    "@elastosfoundation/trinity-types": "^1.1.113",
+    "@elastosfoundation/trinity-types": "^1.1.118",
     "@ionic-native/clipboard": "^5.30.0",
     "@ionic-native/core": "5.30.0",
     "@ionic-native/file": "5.30.0",
