@@ -365,7 +365,7 @@ export const en = {
     'view-mnemonic': "View Mnemonic",
     'mnemonic-warning1': 'Keep it secret,',
     'mnemonic-warning2': 'Keep it safe!',
-    'mnemonic-warning3': 'Never share your mnemonic phrase with anyone and always keep it safe! Make sure no one is watching you and click below.',
+    'mnemonic-warning3': 'Never share your private keys with anyone and always keep it safe! Make sure no one is watching you and then click below.',
     'type-menmonic-verify': 'Please type your 12 security words (mnemonic phrase) in order to verify it.',
     'type-menmonic-import': 'Type your mnemonic sequence of words to import your wallet. ',
     'import-text-word-sucess': 'Wallet imported from Mnemonics',

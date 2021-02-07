@@ -1,19 +1,29 @@
 <ion-content>
-    <ion-slides #slide [options]="slideOpts">
-        <ion-slide class="message-container">
+    <ion-slides #slider [options]="slideOpts" (ionSlideWillChange)="getActiveSlide()" class="ion-text-center">
+        <ion-slide class="message-slide">
             <h1>
                 {{ 'mnemonic-warning1' | translate }} <br>{{ 'mnemonic-warning2' | translate }}
             </h1>
             <p>
                 {{ 'mnemonic-warning3' | translate }}
             </p>
-            <ion-row class="btn-container">
-                <ion-button color="secondary" (click)="nextSlide(slide)">
-                    <ion-label> {{ 'view-mnemonic' | translate }}</ion-label>
-                </ion-button>
+            <ion-row class="btn-row">
+                <ion-button color="secondary" (click)="nextSlide()">Continue</ion-button>
             </ion-row>
         </ion-slide>
-        <ion-slide class="ion-text-center mnemonic-container">
+        <ion-slide class="ion-text-center qr-slide">
+            <div class="qr-container">
+                <h1>Elastos Wallet</h1>
+                    <div #qrcode style="width:100%;"></div>
+                <p>{{ mnemonicStr }}</p>
+            </div>
+            <p>This is your secret QR Code which holds your wallet's mnemonic phrase. Remember, this is <strong>NOT</strong> your public QR code. You should only use this when accessing your wallet.</p>
+            <ion-row class="btn-row">
+                <ion-button color="secondary" (click)="print()">Print QR Code</ion-button>
+                <ion-button color="secondary" (click)="nextSlide()">Manual Verification</ion-button>
+            </ion-row>
+        </ion-slide>
+        <ion-slide class="ion-text-center mnemonic-slide">
             <p>
                 {{ 'mnemonic-prompt1' | translate }}<b>{{ 'mnemonic-prompt2' | translate }}</b>{{ 'mnemonic-prompt3' | translate }}<br><br>
             </p>
@@ -23,11 +33,24 @@
                     <ion-label>{{ item.text }}</ion-label>
                 </ion-col>
             </ion-row>
-            <ion-row class="btn-container">
+            <ion-row class="btn-row">
                 <ion-button color="secondary" (click)="goToMnemonicWrite()">
-                    <ion-label>{{ 'memory-written-down' | translate }}</ion-label>
+                    <ion-label>Verify</ion-label>
                 </ion-button>
             </ion-row>
         </ion-slide>
     </ion-slides>
+
+  <!--   <div class="footer" *ngIf="slideIndex < 1">
+        <ion-button (click)="nextSlide()">Continue</ion-button>
+    </div>
+    <div class="footer" *ngIf="slideIndex === 1">
+        <ion-button>Print QR Code</ion-button>
+        <ion-button (click)="nextSlide()">Manual Verification</ion-button>
+    </div>
+    <div class="footer" *ngIf="slideIndex > 1">
+        <ion-button (click)="prevSlide()">Go Back</ion-button>
+        <ion-button>Verify</ion-button>
+    </div>  -->
 </ion-content>
+
