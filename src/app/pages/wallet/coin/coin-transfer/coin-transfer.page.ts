@@ -92,7 +92,8 @@ export class CoinTransferPage implements OnInit, OnDestroy {
 
     // Helpers
     public Config = Config;
-
+    public CoinType = CoinType;
+    
     // Titlebar
     private onItemClickedListener: any;
 
