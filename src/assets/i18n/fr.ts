@@ -123,6 +123,8 @@ export const fr = {
     "coin-transaction-status-pending": "En attente",
     "coin-transaction-status-unconfirmed": "Non confirmé",
     "text-coin-close-warning": "Le jeton sera supprimé de la liste",
+    "erc20-transactions": "ERC20 token transactions",
+    "cannot-display": "cannot be displayed at this time",
 
     /*******************
     * Coin Select Page *

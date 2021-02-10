@@ -114,7 +114,8 @@
         </div>
         <div class="empty-list" *ngIf="transferList.length === 0">
             <img src="assets/icons/warning.svg"/>
-            <h1>{{ 'coin-no-transactions' | translate }}</h1>
+            <h1 *ngIf="!chainIsERC20()">{{ 'coin-no-transactions' | translate }}</h1>
+            <h2 *ngIf="chainIsERC20()">{{ 'erc20-transactions' | translate }} <br> {{ 'cannot-display' | translate }}</h2>
         </div>
         <div class="more" (click)="clickMore()" *ngIf="isShowMore">
             {{ 'click-to-load-more' | translate }}

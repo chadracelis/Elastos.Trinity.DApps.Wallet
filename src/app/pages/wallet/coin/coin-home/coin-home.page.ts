@@ -67,6 +67,7 @@ export class CoinHomePage implements OnInit {
     // Helpers
     public Util = Util;
     public SELA = Config.SELA;
+    public CoinType = CoinType;
 
     private eventId = '';
 
