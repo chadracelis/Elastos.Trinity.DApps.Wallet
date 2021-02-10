@@ -76,15 +76,21 @@
                 <p *ngIf="isStandardSubwallet(fromSubWallet)">{{ currencyService.selectedCurrency.symbol }}</p>
             </ion-col>
             <ion-col size="6" class="right-col">
-                <ion-input
+                <h5 *ngIf="sendMax">
+                    {{ 'transfer-all' | translate }}
+                </h5>
+                <ion-input *ngIf="!sendMax"
                     class="amount-input"
                     type="number"
                     placeholder="0"
                     [(ngModel)]="amount"
                 >
                 </ion-input>
-                <p *ngIf="amount">
+                <p *ngIf="amount && !sendMax">
                     {{ fromSubWallet.getAmountInExternalCurrency(convertAmountToBigNumber(amount)) }}
+                </p>
+                <p *ngIf="sendMax">
+                    {{ fromSubWallet.getAmountInExternalCurrency(convertAmountToBigNumber(this.masterWallet.subWallets[chainId].getDisplayBalance())) }}
                 </p>
             </ion-col>
         </ion-row>
@@ -114,7 +120,7 @@
         <ion-row class="contact-row" [class.invisible]="!addressName">
             <p>{{ addressName }}</p>
         </ion-row>
-       
+
         <ion-row *ngIf="suggestedAddresses.length > 0" class="cryptoname-row">
             <ion-col size="12" *ngFor="let suggestedAddress of suggestedAddresses" (click)="selectSuggestedAddress(suggestedAddress)">
                 <span>{{ suggestedAddress.getDisplayName() }}</span>
@@ -200,21 +206,25 @@
                 </ion-col>
             </ion-row>
         </div>
+        <div>
+            <p>{{ 'balance' | translate }}:  <strong>{{ masterWallet.subWallets[chainId].getDisplayBalance() }}</strong></p>
+        </div>
     </div>
 </ion-content>
 
 <!------------------ PAY INTENT FOOTER ------------------>
 <ion-footer
-     *ngIf="transferType === 3"
     class="pay-footer" [class.dark-pay-footer]="theme.darkMode"
+    *ngIf="transferType === 3"
 >
+    <p *ngIf="amountIsSuffice()">{{ 'insufficient-balance' | translate }}</p>
     <ion-row class="btn-row">
         <ion-col class="btn cancel ion-activatable ripple" size="5.6" (click)="cancelPayment()">
-            <ion-label>{{ 'cancel' | translate}}</ion-label>
+            <ion-label>{{ 'cancel' | translate }}</ion-label>
             <ion-ripple-effect></ion-ripple-effect>
         </ion-col>
         <ion-col class="btn confirm ion-activatable ripple" size="5.6" (click)="goTransaction()">
-            <ion-label>{{ 'confirm' | translate}}</ion-label>
+            <ion-label>{{ 'confirm' | translate }}</ion-label>
             <ion-ripple-effect></ion-ripple-effect>
         </ion-col>
     </ion-row>

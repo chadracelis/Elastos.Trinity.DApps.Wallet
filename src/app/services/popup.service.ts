@@ -147,8 +147,8 @@ export class PopupProvider {
   public ionicConfirm(
     title: string,
     message: string,
-    okText: string = "cancel",
-    cancelText: string = "confirm"
+    okText: string = "confirm",
+    cancelText: string = "cancel"
   ): Promise<any> {
     return new Promise((resolve, reject) => {
       this.alertPopup = null;

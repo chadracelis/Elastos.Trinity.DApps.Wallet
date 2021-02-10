@@ -234,7 +234,7 @@
                 font-weight: 600;
                 letter-spacing: 0.95px;
             }
-    
+
             p {
                 margin: 0;
                 padding-top: 4px;
@@ -272,7 +272,7 @@
             .amount-input {
                 --padding-end: 0;
                 --padding-top: 0;
-               --padding-bottom: 4px;
+                --padding-bottom: 4px;
                 font-weight: 700;
             }
 
@@ -391,7 +391,7 @@
 
     div {
       text-align: left;
-      padding: 0 40px;
+      padding: 0 30px;
       width: 100%;
     }
 
@@ -399,7 +399,7 @@
         padding: 0 20px;
     }
 
-    h1, h2, h3, h4 {
+    h1, h2, h3, h4, p{
       margin: 0;
       width: 100%;
     }
@@ -413,6 +413,7 @@
       font-size: 14px;
     }
 
+    // Screen title
     h1 {
       padding-top: 10px;
       padding-bottom: 5px;
@@ -420,6 +421,7 @@
       font-weight: 600;
     }
 
+    // Screen subtitle
     h2 {
       padding-top: 20px;
       padding-bottom: 20px;
@@ -427,16 +429,27 @@
       font-weight: 700;
     }
 
+    // Item type
     h3 {
       padding-top: 5px;
       padding-bottom: 5px;
       font-weight: 700;
     }
 
+    // Item value
     h4 {
       padding-top: 0;
       padding-bottom: 15px;
       font-weight: 400;
+    }
+
+    // Balance
+    p {
+        padding-top: 7.5px;
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: 0.7px;
+        text-align: right;
     }
 
     .item-row {
@@ -448,7 +461,7 @@
         justify-content: space-between;
         align-items: center;
 
-        h2, .amount-input {
+        h2, h5, .amount-input {
             width: 100%;
             margin: 0;
             font-size: 19px;
@@ -489,7 +502,7 @@
             align-items: flex-end;
             overflow: hidden;
 
-            .amount-input, p {
+            .amount-input, p, h5 {
                 text-align: right;
             }
 
@@ -528,6 +541,15 @@
 /********************** Pay Intent Footer **********************/
 .pay-footer {
     padding: 20px 10px;
+
+    p {
+        margin-top: 0;
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.7px;
+        color: red;
+        text-align: center;
+    }
 
     .btn-row {
         width: 100%;

@@ -22,7 +22,7 @@
 
 import { Component, OnInit, NgZone, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { PopoverController, ModalController } from '@ionic/angular';
+import { ModalController } from '@ionic/angular';
 import { AppService, ScanType } from '../../../../services/app.service';
 import { Config } from '../../../../config/Config';
 import { Native } from '../../../../services/native.service';
@@ -72,7 +72,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
     public toAddress: string;
     public amount: number; // Here we can use JS "number" type, for now we consider we will never transfer a number that is larger than JS's MAX INT.
     public memo = '';
-    public sendAllBalance = false;
+    public sendMax = false;
 
     // Display recharge wallets
     public fromSubWallet: SubWallet;
@@ -92,7 +92,6 @@ export class CoinTransferPage implements OnInit, OnDestroy {
 
     // Helpers
     public Config = Config;
-    private SELA = Config.SELA;
 
     // Titlebar
     private onItemClickedListener: any;
@@ -280,7 +279,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
      */
     async createSendTransaction() {
         let toAmount: number;
-        if (this.chainId === StandardCoinName.ELA || this.chainId === StandardCoinName.IDChain) {
+        if (!this.sendMax && (this.chainId === StandardCoinName.ELA || this.chainId === StandardCoinName.IDChain)) {
             toAmount = this.accMul(this.amount, Config.SELA);
         } else {
             toAmount = this.amount;
@@ -374,24 +373,28 @@ export class CoinTransferPage implements OnInit, OnDestroy {
         this.appService.scan(ScanType.Address);
     }
 
-    supportSendAllBalance() {
+    /* supportsMaxTransfer() {
         // Only the payment transaction of ELA and IDChain support send all balance.
         // TODO: what should to do with ETHSC and ERC20 Token?
         if ((this.chainId === StandardCoinName.ELA) || (this.chainId === StandardCoinName.IDChain)) {
-            if (this.fromSubWallet.id === this.toSubWallet.id) {
+            if ((this.transferType === TransferType.SEND) || (this.amountCanBeEditedInPayIntent && (this.transferType === TransferType.PAY))) {
                 return true;
             }
         }
         return false;
     }
 
-    sendAll() {
-        if (this.supportSendAllBalance()) {
-            this.sendAllBalance = true;
-            // -1 means send all.
-            this.amount = -1;
-        }
-    }
+    setMaxTransfer() {
+        this.zone.run(() => {
+            this.sendMax = !this.sendMax;
+            if (this.sendMax) {
+                // -1 means send max.
+                this.amount = -1;
+            } else {
+                this.amount = null;
+            }
+        });
+    } */
 
     supportsMaxTransfer() {
         if(this.chainId === StandardCoinName.ELA || this.chainId === StandardCoinName.IDChain) {
@@ -405,17 +408,27 @@ export class CoinTransferPage implements OnInit, OnDestroy {
         this.amount = this.masterWallet.subWallets[this.chainId].getDisplayBalance().toNumber() - 0.001;
     }
 
+    amountIsSuffice() {
+        if(this.masterWallet.subWallets[this.chainId].getDisplayBalance().toNumber() - 0.001 < this.amount) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     async goTransaction() {
         // this.showConfirm();
         // this.showSuccess();
 
-        if (this.valuesReady()) {
+        if (this.sendMax || this.valuesReady()) {
             await this.startTransaction();
         }
     }
 
     // For revealing button
     valuesValid(): boolean {
+        if (this.sendMax) return true;
+
         if (Util.isNull(this.amount)) {
             return false;
         } else if (!Util.number(this.amount)) {
